@@ -1,0 +1,128 @@
+.App {
+  text-align: center;
+  padding-top: 50px;
+}
+
+.App-logo {
+  height: 40vmin;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .App-logo {
+    animation: App-logo-spin infinite 20s linear;
+  }
+}
+
+.App-header {
+  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.App-link {
+  color: #61dafb;
+}
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.search {
+  display: flex;
+  justify-content: flex-end;
+  margin-right: 30px;
+}
+
+.searchBar {
+  width: 250px;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 14px;
+  color: rgba(0,0,0,0.73);
+}
+
+
+.searchBar input {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 14px;
+  color: rgba(0, 0, 0, 0.73);
+  padding: 5px 5px;
+  box-sizing: border-box;
+  outline: none;
+}
+
+.searchBar ul {
+  list-style-type: none;
+  text-align: left;
+  margin: 0;
+  padding: 0;
+  background: white;
+  width: 250px;
+  position: absolute;
+  z-index: 1000;
+}
+
+.searchBar ul::before {
+  content: "";
+}
+
+.searchBar li {
+  padding: 2px 5px;
+  cursor: pointer;
+}
+
+.search li:hover {
+  text-decoration: underline;
+  background-color: rgba(128,128,128,0.20);
+}
+
+
+.loginForm {
+  width: 100%;
+  max-width: 330px;
+  margin: auto;
+  padding: 20px;
+  border-radius: 5px !important;
+  background-color: #b1d8d2;
+}
+
+.documentForm {
+  width: 100%;
+  max-width: 500px;
+  margin: auto;
+}
+
+.tabsDocument {
+  border-radius: 2px !important;
+  background-color: #b1d8d2;
+}
+
+.tabText {
+  border-left: 1px solid #d7d7d7;
+  border-right: 1px solid #d7d7d7;
+  border-bottom: 1px solid #d7d7d7;
+  border-radius: 5px !important;
+  background-color: #b1d8d2;
+  height: 200px;
+  color: #282c34;
+}
+
+#documentUpload {
+  padding: 20px;
+}
+
+table {
+  margin: auto;
+  width: 100%;
+  max-width: 850px;
+}
