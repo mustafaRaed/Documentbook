@@ -1,10 +1,13 @@
 var express = require('express');
 var userModel = require('../models/user');
 require('./database');
+var cors = require('cors')
 
-const server = express();
+server = express();
 
-server.listen(3000);
+server.use(cors())
+
+server.listen(9000);
 
 server.get('/',(req,res) => {
     userModel.find().then(users => res.send(users));
