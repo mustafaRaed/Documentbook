@@ -8,6 +8,7 @@ import Home from './Home';
 import Lhome from './Lhome';
 import Login from './Login';
 import Dokument from './Dokument';
+import Users from "./Users"
 
 class App extends React.Component {
     constructor(props) {
@@ -27,6 +28,7 @@ class App extends React.Component {
                             <Route path="/" exact component={Lhome}/>
                             <Route path="/Login" component={Login}/>
                             <Route path="/Dokument" component={Dokument}/>
+                            <Route path="/Users" component={Users}/>
                         </Switch>
                     </Router>
                 </Layout>

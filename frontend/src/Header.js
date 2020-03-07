@@ -48,6 +48,8 @@ class Header extends React.Component {
                                 className="badge badge-pill badge-danger">1</span></Nav.Link></Nav.Item> : null }
                         {this.state.loggedIn && this.state.isAdmin ?
                             < Nav.Item > < Nav.Link href="/kurser">Hantera kurser</Nav.Link></Nav.Item> :null }
+                        {this.state.loggedIn && this.state.isAdmin ?
+                            < Nav.Item > < Nav.Link href="/Users">Users</Nav.Link></Nav.Item> :null }
                         { this.state.loggedIn ?
                             <Nav.Item><Nav.Link onClick={this.setLogin} href="/">Logga ut</Nav.Link></Nav.Item> :null }
                         { this.state.loggedIn ?
