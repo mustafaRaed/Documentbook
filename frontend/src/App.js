@@ -9,6 +9,7 @@ import Lhome from './Lhome';
 import Login from './Login';
 import Dokument from './Dokument';
 import Users from "./Users"
+import CoursePage from "./components/CoursePage"
 
 class App extends React.Component {
     constructor(props) {
@@ -24,11 +25,11 @@ class App extends React.Component {
                 <Layout>
                     <Router>
                         <Switch>
-                    /**        <Route path="/" exact component={Home}/> */
                             <Route path="/" exact component={Lhome}/>
                             <Route path="/Login" component={Login}/>
                             <Route path="/Dokument" component={Dokument}/>
                             <Route path="/Users" component={Users}/>
+                            <Route path="/course/:name" component={CoursePage}/>
                         </Switch>
                     </Router>
                 </Layout>
