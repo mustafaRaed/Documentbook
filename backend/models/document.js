@@ -1,5 +1,4 @@
 let mongoose = require('mongoose');
-let validator = require('validator');
 
 let documentSchema = new mongoose.Schema({
     path: String,

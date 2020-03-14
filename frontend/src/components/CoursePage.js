@@ -7,13 +7,12 @@ class CoursePage extends Component{
 
     constructor(props) {
         super();
-        console.log(props.match.params.name)
         this.state = {courseName: props.match.params.name,
                       documents: []}
     }
 
     componentDidMount() {
-        fetch("http://localhost:9000/documents")
+        fetch("http://localhost:9000/documents/" + this.state.courseName)
             .then(res => res.json())
             .then(res => res.map(document => <div>
                                                 <Document key={document._id} data={document}/>
