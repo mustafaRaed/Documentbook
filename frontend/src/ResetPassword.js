@@ -34,18 +34,18 @@ function ResetPassword(props) {
 
     return (
         <div>
-        <ResetForm className="mt-5">
-        <h4>Återställ lösenord</h4>
+            <ResetForm className="mt-5">
+            <h4>Återställ lösenord</h4>
 
-    <div className="resetForm">
-        <Label>Ange din registrerade e-postadress för att skicka en länk med instruktioner för att återställa lösenord</Label>
-    <Input type="email" id="email" className="form-control" placeholder="E-post" value={email} onChange={e => { setEmail(e.target.value);}}/>
-    </div>
+            <div className="resetForm">
+                <Label>Ange din registrerade e-postadress för att skicka en länk med instruktioner för att återställa lösenord</Label>
+                <Input type="email" id="email" className="form-control" placeholder="E-post" value={email} onChange={e => { setEmail(e.target.value);}}/>
+            </div>
 
-    <button onClick={passwordChanger} className="btn btn-secondary btn-block">Skicka inloggningslänk</button>
-    {/**      {isError && <Error>Användarnamn och lösenord stämmer inte överrens! </Error>} */}
-</ResetForm>
-    </div>
+            <button onClick={passwordChanger} className="btn btn-secondary btn-block">Skicka inloggningslänk</button>
+            {/**      {isError && <Error>Användarnamn och lösenord stämmer inte överrens! </Error>} */}
+            </ResetForm>
+        </div>
 );
 }
 
