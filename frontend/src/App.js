@@ -10,6 +10,7 @@ import Login from './Login';
 import Dokument from './Dokument';
 import Users from "./Users"
 import CoursePage from "./components/CoursePage"
+import EditCourses from "./components/EditCourses"
 
 class App extends React.Component {
     constructor(props) {
@@ -30,6 +31,7 @@ class App extends React.Component {
                             <Route path="/Dokument" component={Dokument}/>
                             <Route path="/Users" component={Users}/>
                             <Route path="/course/:name" component={CoursePage}/>
+                            <Route path="/kurser" component={EditCourses}/>
                         </Switch>
                     </Router>
                 </Layout>

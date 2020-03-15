@@ -6,6 +6,7 @@ require('./database');
 var cors = require('cors')
 var multer = require('multer')
 const fs = require('fs')
+var bodyParser = require("body-parser")
 
 var destFolder = './uploads/';
 
@@ -48,6 +49,7 @@ courseModel.countDocuments({}, (err, res) => {
 var upload = multer({ storage: storage })
 
 server = express();
+server.use(bodyParser.json())
 
 server.use(cors())
 
@@ -78,7 +80,6 @@ server.get('/update-user/:id&:userName', (req,res) => {
 });
 
 server.post('/post-document', upload.single('document'),(req, res) => {
-    //console.log(req.file);
     var file = req.file;
     var body = req.body;
     documentModel({
@@ -103,3 +104,20 @@ server.get('/courses', (req,res) => {
     courseModel.aggregate([{$group: {_id: "$termin", objects: {$push: "$$ROOT"}}},
                                    {$sort: {"_id": 1}}]).then(courses => res.send(courses))
 })
+
+server.get('/courseInfo', (req,res) => {
+    courseModel.find().then(courses => res.send(courses))
+})
+
+server.post('/update-course',(req,res) => {
+    let updatedCourse = req.body.updatedCourse
+    let originalCourse = req.body.originalCourse
+    console.log(updatedCourse)
+    if (originalCourse.name !== updatedCourse.name)
+        fs.renameSync(destFolder+originalCourse.name, destFolder+updatedCourse.name, err => {console.log(err)})
+
+    courseModel.updateOne({_id: updatedCourse._id}, {name: updatedCourse.name,
+                                                     termin: updatedCourse.termin,
+                                                     hp: updatedCourse.hp})
+        .then(e => console.log(e))
+});
