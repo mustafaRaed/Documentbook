@@ -40,8 +40,8 @@ router.route('/add').post((req, res) => {
     const transporter = nodemailer.createTransport({
         service: "Gmail",
         auth: {
-            user: "fogelstrme@gmail.com", // generated ethereal user
-            pass: "ped(bankEr" // generated ethereal password
+            user: "", // generated ethereal user
+            pass: "" // generated ethereal password
         }
     });
 
@@ -148,8 +148,8 @@ router.route('/reset').post((req, res) => {
             const transporter = nodemailer.createTransport({
                 service: "Gmail",
                 auth: {
-                    user: "fogelstrme@gmail.com", // generated ethereal user
-                    pass: "ped(bankEr" // generated ethereal password
+                    user: "", // generated ethereal user
+                    pass: "" // generated ethereal password
                 }
             });
 
