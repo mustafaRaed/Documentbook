@@ -1,40 +1,47 @@
-import React from 'react';
+import React, { useState } from 'react';
 import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
-import {BrowserRouter as Router, Switch, Route} from 'react-router-dom';
+import {BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+import PrivateRoute from './PrivateRoute';
+import { AuthContext } from "./components/auth";
 import Header from './Header';
 import { Layout } from './components/Layout';
 import Searchbar from './components/Searchbar';
 import Home from './Home';
+import Register from './Register';
 import Lhome from './Lhome';
 import Login from './Login';
-import Dokument from './Dokument';
+import CoursePage from './components/CoursePage';
 import Users from "./Users"
+import ChangePassword from "./ChangePassword";
+import resetPassword from "./ResetPassword"
 
-class App extends React.Component {
-    constructor(props) {
-        super(props);
-    }
+function App(props) {
+    const [user, setUser] = useState(null);
+ //   const loggedIn = useMemo(() => ({user, setUser}), [user, setUser]);
 
-    render () {
         return (
             <React.Fragment>
-                <Header />
-                <Searchbar/>
-                <hr/>
-                <Layout>
-                    <Router>
+            <Router>
+                <AuthContext.Provider value={{user, setUser}}>
+
+                    <Header />
+                    <Searchbar/>
+                    <hr/>
+                    <Layout>
                         <Switch>
-                    /**        <Route path="/" exact component={Home}/> */
-                            <Route path="/" exact component={Lhome}/>
+                            { user ? (<Route path="/" exact component={Lhome}/>) : ( <Route path="/" exact component={Home}/> ) }
                             <Route path="/Login" component={Login}/>
-                            <Route path="/Dokument" component={Dokument}/>
-                            <Route path="/Users" component={Users}/>
+                            <Route path="/ChangePassword/:email" component={ChangePassword}/>
+                            <Route path="/resetPassword" component={resetPassword}/>
+                            <Route path="/Register" component={Register}/>
+                            <PrivateRoute path="/Users" component={Users}/>
+                            <PrivateRoute path="/course/:name" component={CoursePage}/>
                         </Switch>
-                    </Router>
-                </Layout>
+                    </Layout>
+                </AuthContext.Provider>
+            </Router>
             </React.Fragment>
         );
-    }
 }
 
 export default App;

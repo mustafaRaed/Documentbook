@@ -9,7 +9,7 @@ class Users extends React.Component{
     componentDidMount() {
         fetch("http://localhost:9000/")
             .then(res => res.json())
-            .then(res => res.map(e => <p key={e._id}>{e.name}</p>))
+            .then(res => res.map(e => <p key={e._id}>{e.name + " " + e.email + " " + e.password}</p>))
             .then(res => this.setState({users: res}))
     }
 
