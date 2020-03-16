@@ -23,32 +23,32 @@ class Lhome extends Component {
         fetch("http://localhost:9000/courses")
             .then(res => res.json())
             .then(res => res.map(termin => <tr key={termin._id}>
-            {console.log(res)}
-            <td width="75px">Termin {termin._id}</td>
-        {termin.objects.sort(this.compareFunction)
-            .map(course => <td key={course._id} colSpan={(course.hp/7.5).toString()}>
-        <Button variant={"link"}>
-            <Link to={"/course/" + course.name}>
-            {course.name}
-            </Link></Button>
-        </td>)}
-        </tr>))
+                {console.log(res)}
+                                            <td width="75px">Termin {termin._id}</td>
+                                            {termin.objects.sort(this.compareFunction)
+                                                .map(course => <td key={course._id} colSpan={(course.hp/7.5).toString()}>
+                                                                <Button variant={"link"}>
+                                                                    <Link to={"/course/" + course.name}>
+                                                                        {course.name}
+                                                                    </Link></Button>
+                                                                </td>)}
+                                           </tr>))
             .then(res => this.setState({courses: res}))
-        }
+    }
 
-        render() {
-            return (
-                <Table striped bordered hover size="sm" className="mt-5" hover={false}>
+    render() {
+        return (
+            <Table striped bordered hover size="sm" className="mt-5" hover={false}>
                 <thead>
                 <tr>
-                <th colSpan="5" className="text-center">
-                <h2>Programmet Sjuksköterskeutbildningen 180 hp</h2>
-            </th>
-            </tr>
-            </thead>
-            <tbody>
-            {this.state.courses}
-            </tbody>
+                    <th colSpan="5" className="text-center">
+                        <h2>Programmet Sjuksköterskeutbildningen 180 hp</h2>
+                    </th>
+                </tr>
+                </thead>
+                <tbody>
+                {this.state.courses}
+                </tbody>
             </Table>
         );
         }

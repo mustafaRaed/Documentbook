@@ -15,6 +15,7 @@ import Users from "./Users"
 import ChangePassword from "./ChangePassword";
 import resetPassword from "./ResetPassword"
 
+
 function App(props) {
     const [user, setUser] = useState(null);
  //   const loggedIn = useMemo(() => ({user, setUser}), [user, setUser]);
@@ -34,7 +35,6 @@ function App(props) {
                             <Route path="/ChangePassword/:email" component={ChangePassword}/>
                             <Route path="/resetPassword" component={resetPassword}/>
                             <Route path="/Register" component={Register}/>
-                            <PrivateRoute path="/Users" component={Users}/>
                             <PrivateRoute path="/course/:name" component={CoursePage}/>
                         </Switch>
                     </Layout>
