@@ -3,6 +3,7 @@ import { Redirect } from "react-router-dom";
 import axios from "axios";
 import { Form, Input, Error } from "./components/authForm";
 import {AuthContext, useAuth} from "./components/auth";
+import Dialog from "react-bootstrap-dialog";
 
 
 function ChangePassword(props) {
@@ -10,17 +11,17 @@ function ChangePassword(props) {
     const [password, setPassword] = useState("");
     const [newPassword, setNewPassword] = useState("");
     const [repeatPassword, setRepeatPassword] = useState("");
-    const [failedLogin, setFailedLogin] = useState(false);
+    const [changedPassword, setChangedPassword] = useState(false);
+    const [dialog, setDialog] = useState("");
     const {user, setUser} = useContext(AuthContext);
     const referer = props.location.state || '/';
 
-    function passwordChanger(e) {
-        e.preventDefault();
+    function passwordChanger() {
         const last = window.location.pathname;
         const part = last.substring(last.lastIndexOf('/') + 1);
-        console.log("Last part: " + part);
         let userfrom = {
-            email: part,
+            email: userName,
+            token: part,
             password: password,
             newPassword: newPassword,
             repeatPassword: repeatPassword,
@@ -29,17 +30,54 @@ function ChangePassword(props) {
         axios.post("http://localhost:9000/users/updatePassword", userfrom )
             .then(res => {
                 if(res.status === 200)
-                    console.log("User update password success");
-
+                    onChangedPassword();
             }).catch(error => {
                     console.log("Error: " + error);
         });
+    }
+
+    function onChangedPassword() {
+        dialog.show({
+            title: 'Uppdaterat',
+            body: 'Ditt lösenord är nu uppdaterat och du kommer bli omdirigerad till inloggningssidan',
+            actions: [
+                Dialog.OKAction(() => setChangedPassword(true))
+            ],
+            bsSize: 'small',
+            onHide: () => setChangedPassword(true)
+        })
+
+    }
+
+    function handleSubmit() {
+        if(newPassword === repeatPassword){
+            passwordChanger();
+        }
+        else{
+            dialog.show({
+                title: 'Error',
+                body: 'Nytt lösenord och repetera nytt lösenord stämmer inte överrens',
+                actions: [
+                    Dialog.OKAction()
+                ],
+                bsSize: 'small'
+            })
+        }
+    }
+
+    if(changedPassword){
+        return <Redirect to="/Login" />;
     }
 
         return (
             <div>
             <Form className="mt-5">
     <h3>Ändra lösenord</h3>
+
+        <div className="form-group">
+            <label>Bekräfta emailadress</label>
+            <Input type="email" id="password" className="form-control" placeholder="Email" value={userName} onChange={e => { setUserName(e.target.value);}}/>
+        </div>
 
         <div className="form-group">
             <label>Nuvarande lösenord</label>
@@ -56,9 +94,10 @@ function ChangePassword(props) {
         <Input type="password" id="repeatPassword" className="form-control" placeholder="Repetera nytt lösenord" value={repeatPassword} onChange={e => { setRepeatPassword(e.target.value);}}/>
         </div>
 
-        <button onClick={passwordChanger} className="btn btn-secondary btn-block">Ändra lösenord</button>
+        <button onClick={handleSubmit} className="btn btn-secondary btn-block">Ändra lösenord</button>
         {/**      {isError && <Error>Användarnamn och lösenord stämmer inte överrens! </Error>} */}
         </Form>
+        <Dialog ref={(component) => { setDialog(component)}} />
         </div>
         );
 }

@@ -36,7 +36,8 @@ function Register() {
         axios.post("http://localhost:9000/users/add", userfrom )
             .then(res => {
                 if(res.status === 200) {
-                  //  this.componentDidMount();
+                    setUserName("");
+                    setEmail("");
                 }
             }).catch(error => {
             console.log(error);
@@ -80,28 +81,28 @@ function Register() {
                     </tbody>
                 </Table>
             </Div1>
-            {show ?
-                <Div3>
-                    <Card className="mt-5">
-                        <Card.Header>Hantera användare</Card.Header>
-                        <Card.Body>
-                            <EditForm>
-                                <div className="form-group">
-                                    <label>Användarnamn</label>
-                                    <Input type="email" id="email" className="form-control" placeholder="E-post" value={userName} onChange={e => {setEmail(e.value.email);}}/>
-                                </div>
-                                <div className="form-group">
-                                    <label>E-post:</label>
-                                    <Input type="email" id="email" className="form-control" placeholder="E-post" value={email} onChange={e => {setEmail(e.value.email);}}/>
-                                </div>
-                                <Buttons>
-                                    <button onClick={() => {setShow(false); setUserName(""); setEmail("")}} className="d-inline float-left btn btn-secondary">Avbryt</button>
-                                    <button onClick={onClickEdit()} className="d-inline float-right btn btn-secondary">Ändra</button>
-                                </Buttons>
-                            </EditForm>
-                        </Card.Body>
-                    </Card>
-                </Div3> :
+    {show ?
+    <Div3>
+    <Card className="mt-5">
+        <Card.Header>Hantera användare</Card.Header>
+    <Card.Body>
+    <EditForm>
+    <div className="form-group">
+        <label>Användarnamn</label>
+        <Input type="text" id="text" className="form-control" placeholder="E-post" value={userName} onChange={e => {setUserName(e.target.value);}}/>
+    </div>
+    <div className="form-group">
+        <label>E-post:</label>
+    <Input type="email" id="email" className="form-control" placeholder="E-post" value={email} onChange={e => {setEmail(e.target.value);}}/>
+    </div>
+    <Buttons>
+    <button onClick={() => {setShow(false); setUserName(""); setEmail("")}} className="d-inline float-left btn btn-secondary">Avbryt</button>
+        <button onClick={onClickEdit()} className="d-inline float-right btn btn-secondary">Ändra</button>
+        </Buttons>
+        </EditForm>
+        </Card.Body>
+        </Card>
+        </Div3> :
                 <Div2>
                     <Card className="mt-5">
                         <Card.Header>Registrera ny användare</Card.Header>
@@ -109,12 +110,12 @@ function Register() {
                             <RegisterForm>
                                 <div className="form-group">
                                     <label>Användarnamn</label>
-                                    <Input type="text" id="name" className="form-control" placeholder="Användarnamn" value={userName} onChange={e => {setUserName(e.value.userName);}}/>
+                                    <Input type="text" id="name" className="form-control" placeholder="Användarnamn" value={userName} onChange={e => {setUserName(e.target.value);}}/>
                                 </div>
 
                                 <div className="form-group">
                                     <label>E-post</label>
-                                    <Input type="email" id="email" className="form-control" placeholder="E-post" value={email} onChange={e => {setEmail(e.value.email);}}/>
+                                    <Input type="email" id="email" className="form-control" placeholder="E-post" value={email} onChange={e => {setEmail(e.target.value);}}/>
                                 </div>
 
                                 <button onClick={registerUser} className="btn btn-secondary btn-block">Registrera</button>

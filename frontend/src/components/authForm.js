@@ -6,8 +6,8 @@ const Form = styled.div`
   min-width: 100px;
   margin: auto;
   padding: 20px;
-  border-radius: 5px !important;
-  background-color: #b1d8d2;
+  border: 1px solid #dddcdc;
+  background-color: WHITE;
 `;
 
 const RegisterForm = styled.div`
