@@ -12,14 +12,14 @@ var salt = bcrypt.genSaltSync(10);
 router.route('/').get((req, res) => {
     User.find()
         .then(users => res.json(users))
-        .catch(err => res.status(400).json('ERror: ' + err));
+        .catch(err => res.sendStatus(400).json('Error: ' + err));
 });
 
 router.route('/add').post(async(req, res) => {
     const name = req.body.name;
     const email = req.body.email;
     const password = bcrypt.hashSync(req.body.password, salt);
-    const isAdmin = false;
+    const isAdmin = true;
     const newUser = new User({
         name,
         email,
@@ -33,7 +33,9 @@ router.route('/add').post(async(req, res) => {
 
     newUser.save()
         .then(() => res.json('User added!'))
-        .catch(err => res.status(400).json('Error: ' + err));
+        .catch(err => res.sendStatus(400).json('Error: ' + err));
+
+    // TODO: Change url to the right url
     const url = `http://localhost:3000/ChangePassword/${token}`;
     const output = `
         <p>Ett nytt konto har skapats</p>
@@ -58,7 +60,6 @@ router.route('/add').post(async(req, res) => {
         from: '"Admin" <noreply@oursite.com>', // sender address
         to: email, // list of receivers
         subject: "Nytt användarkonto", // Subject line
-        text: "Hello world?", // plain text body
         html: output // html body
     };
 
@@ -76,24 +77,24 @@ router.route('/add').post(async(req, res) => {
 router.route('/login').post((req, res) => {
     let email = req.body.email;
     let password = req.body.password;
-    console.log("Email: " + email + " password: " + password);
+
     User.findOne({email: email}, function(err, user) {
         if(err) {
             console.log(err);
-            return res.status(500).send();
+            return res.sendStatus(500).json('Error: ' + err);
         }
         if(!user) {
-            return res.status(404).send();
+            return res.sendStatus(404).json('Error: ' + err);
         }
         if(user)
             bcrypt.compare(password, user.password).then(isMatch => {
                 if(isMatch) {
-                    console.log("user logged in");
-                    return res.status(200).send();
+                    console.log("user logged in")
+                    return res.status(200).send(user.isAdmin);
                 }
                 else {
-                    console.log("wrong password");
-                    return res.status(400).json(err);
+                    console.log("password is wrong")
+                    return res.sendStatus(400).json(err);
                 }
             })
     });
@@ -102,25 +103,25 @@ router.route('/login').post((req, res) => {
 router.route('/:id').delete((req, res) => {
     User.findByIdAndDelete(req.params.id)
         .then(() => res.json('User deleted'))
-        .catch(err => res.status(400).json('Error: ' +err));
+        .catch(err => res.sendStatus(400).json('Error: ' +err));
 });
 
 router.route('/updatePassword/').post(async(req, res) => {
     let email = req.body.email;
     let token = req.body.token;
     let password = bcrypt.hashSync(req.body.password, salt);
-    let newPassword = bcrypt.hashSync(req.body.newPassword, salt);;
+    let newPassword = bcrypt.hashSync(req.body.newPassword, salt);
     console.log("Email: " + token);
     try{
         const verifyToken = jwt.verify(token, process.env.JWT_SECRET_KEY);
         if(verifyToken) {
-            User.findOneAndUpdate({email: email}, {password: password}, function (err, user) {
+            User.findOneAndUpdate({email: email}, {password: password}, {new: true, useFindAndModify: false}, function (err, user) {
                 if (err) {
                     console.log(err);
-                    return res.status(500).send();
+                    return res.sendStatus(500);
                 }
                 if (!user) {
-                    return res.status(404).send();
+                    return res.sendStatus(404);
                 }
                 if (user) {
                     user.password = newPassword;
@@ -128,7 +129,7 @@ router.route('/updatePassword/').post(async(req, res) => {
                         if (err) {
                             res.send("Error: ", err);
                         } else {
-                            return res.send(200);
+                            return res.sendStatus(200);
                         }
                     });
                 }
@@ -141,6 +142,42 @@ router.route('/updatePassword/').post(async(req, res) => {
     }
 });
 
+router.route('/updateUser/').post(async(req, res) => {
+    let userName = req.body.name;
+    let newUserName = req.body.editUser;
+    let email = req.body.email;
+    let newEmail = req.body.editEmail;
+    try{
+            User.findOneAndUpdate({name: userName}, {email: email}, {new: true, useFindAndModify: false}, function (err, user) {
+                if (err) {
+                    console.log(err);
+                    return res.sendStatus(500);
+                }
+                if (!user) {
+                    return res.sendStatus(404);
+                }
+                if (user) {
+                    user.name = newUserName;
+                    user.email = newEmail;
+                    user.save(function (err, user) {
+                        if (err) {
+                            res.send("Error: ", err);
+                        } else {
+                            return res.sendStatus(200);
+                        }
+                    });
+                }
+
+            });
+    }catch(err) {
+        console.log("Error: " + err);
+        return false;
+    }
+});
+
+
+
+
 router.route('/reset').post(async(req, res) => {
     const email = req.body.email;
     const password = bcrypt.hashSync(req.body.password, salt);
@@ -151,7 +188,7 @@ router.route('/reset').post(async(req, res) => {
 
     User.findOne({email: email}, function(err, user){
         if(err) {
-            return res.status(500).send();
+            return res.sendStatus(500);
         }
         if(user) {
             const url = `http://localhost:3000/ChangePassword/${token}`;

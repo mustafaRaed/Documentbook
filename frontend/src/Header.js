@@ -24,6 +24,8 @@ const Styles = styled.div`
 function Header() {
 
     const {user, setUser} = useContext(AuthContext);
+  //  const [isUser, setIsUser] = user;
+ //   const [isAdmin, setIsAdmin] = admin;
     return(
         <Styles>
             <Navbar expand="lg">
@@ -31,8 +33,8 @@ function Header() {
                 <Navbar.Collapse id="basic-navbar-nav">
                     <Nav className="ml-auto">
                         <Nav.Item><Nav.Link as={Link} to="/">Hem </Nav.Link></Nav.Item>
-                        { user ? (<Nav.Item><Nav.Link as={Link} to="/Register">Hantera användare</Nav.Link></Nav.Item> ) : null }
-                        { user ? (<Nav.Item><Nav.Link as={Link} to="/" onClick={() =>{ setUser(null);}}>Logout</Nav.Link></Nav.Item>) : (<Nav.Item><Nav.Link as={Link} to="/Login">Login</Nav.Link></Nav.Item> )}
+                        { user === "admin" ? (<Nav.Item><Nav.Link as={Link} to="/Register">Hantera användare</Nav.Link></Nav.Item> ) : null }
+                        { user ? (<Nav.Item><Nav.Link as={Link} to="/" onClick={() =>{ setUser(null)}}>Logout</Nav.Link></Nav.Item>) : (<Nav.Item><Nav.Link as={Link} to="/Login">Login</Nav.Link></Nav.Item> )}
                     </Nav>
                 </Navbar.Collapse>
             </Navbar>

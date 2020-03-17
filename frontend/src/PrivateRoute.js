@@ -4,6 +4,7 @@ import { useAuth } from "./components/auth";
 
 function PrivateRoute ({ component: Component, ...rest }) {
     const { user } = useAuth();
+    console.log("PrivateRoute: " + user)
 
     return (
         <Route { ... rest } render = {(props) => user ? (

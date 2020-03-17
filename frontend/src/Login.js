@@ -9,6 +9,7 @@ function Login(props) {
     const [password, setPassword] = useState("");
     const [failedLogin, setFailedLogin] = useState(false);
     const {user, setUser} = useContext(AuthContext);
+    const [admin, setAdmin] = useState(false);
     const referer = props.location.state || '/';
 
     function loginToPage(e) {
@@ -23,17 +24,18 @@ function Login(props) {
         axios.post("http://localhost:9000/users/login", userfrom )
             .then(res => {
                 if (res.status === 200){
-                    setUser(res.status);
-                    console.log("Login success")
-                }
-
+                        if(res.data) {
+                            setUser("admin");
+                        }else
+                            setUser("user");
+                        }
             }).catch(error => {
                 setFailedLogin(true);
         });
     }
 
     if(user){
-        return <Redirect to="/Admin" />;
+        return <Redirect to="/" />;
     }
 
     return (
@@ -60,7 +62,7 @@ function Login(props) {
 
                 <button onClick={loginToPage} className="btn btn-secondary btn-block">Logga in</button>
                 <p className="forgot-password text-right">
-                    Glömt <Link to="/resetPassword">lösenord?</Link>
+                    <Link to="/resetPassword">Glömt lösenord?</Link>
                 </p>
                 { failedLogin ? <p style={{color:'red'}}> Inloggningen misslyckades, försök igen. </p> : null }
             </Form>
