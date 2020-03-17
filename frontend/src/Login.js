@@ -3,13 +3,13 @@ import { Redirect, Link } from "react-router-dom";
 import axios from "axios";
 import { Form, Input } from "./components/authForm";
 import {AuthContext} from "./components/auth";
+import Cookies from 'js-cookie'
 
 function Login(props) {
     const [userName, setUserName] = useState("");
     const [password, setPassword] = useState("");
     const [failedLogin, setFailedLogin] = useState(false);
     const {user, setUser} = useContext(AuthContext);
-    const [admin, setAdmin] = useState(false);
     const referer = props.location.state || '/';
 
     function loginToPage(e) {
@@ -18,8 +18,6 @@ function Login(props) {
             email: userName,
             password: password,
         };
-
-        console.log("username: " + userName + " password: " + password);
 
         axios.post("http://localhost:9000/users/login", userfrom )
             .then(res => {
@@ -35,6 +33,7 @@ function Login(props) {
     }
 
     if(user){
+        Cookies.set("role", user);
         return <Redirect to="/" />;
     }
 

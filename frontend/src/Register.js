@@ -13,7 +13,6 @@ function Register() {
     const [dialog, setDialog] = useState("");
     const [users, setUsers] = useState([]);
     const [show, setShow] = useState(false);
-    const {user } = useAuth();
 
     useEffect(() => {
         axios.get("http://localhost:9000/users")
