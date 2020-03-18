@@ -16,7 +16,8 @@ function EditCourseForm(props) {
                         <Col>
                             <Form.Group controlId="terminFormInput">
                                 <Form.Label>Termin</Form.Label>
-                                <Form.Control as="select" value={props.updatedCourse.termin} onChange={props.changeHandler}>
+                                <Form.Control as="select" value={props.updatedCourse.termin === -1 ? "Not in termin" : props.updatedCourse.termin}
+                                              onChange={props.changeHandler}>
                                     {props.termins}
                                 </Form.Control>
                             </Form.Group>
@@ -29,6 +30,15 @@ function EditCourseForm(props) {
                                 </Form.Control>
                             </Form.Group>
                         </Col>
+                        <Col>
+                            <Form.Group controlId="placeInTerminFormInput">
+                                <Form.Label>Place in termin</Form.Label>
+                                <Form.Control as="select" value={props.updatedCourse.positionInTermin} onChange={props.changeHandler}>
+                                    {console.log(props.updatedCourse.positionInTermin)}
+                                    {props.nrInTermin}
+                                </Form.Control>
+                            </Form.Group>
+                        </Col>
                     </Row>
                     <br/>
                     <Row>
@@ -36,6 +46,13 @@ function EditCourseForm(props) {
                             <Button variant={"primary"} type={"submit"} size={"lg"} onClick={props.updateHandler}
                                     disabled={!props.activateUpdateButton}>
                                 Update
+                            </Button>
+                        </Col>
+                        <Col></Col>
+                        <Col></Col>
+                        <Col>
+                            <Button variant={"danger"} type={"submit"} size={"lg"} onClick={props.handleDeleteCourse}>
+                                Delete course!
                             </Button>
                         </Col>
                     </Row>

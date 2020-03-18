@@ -6,17 +6,31 @@ import AddCourseForm from "./AddCourseForm";
 class EditCourses extends Component{
     constructor() {
         super();
-        this.state = {courses: [], selectedCourse: {}, updatedCourse: {}, activateUpdateButton: false}
+        this.state = {courses: [], selectedCourse: {}, updatedCourse: {}, newCourse: {},
+                      activateUpdateButton: false, activateAddButton: false}
+        this.termins = [1,2,3,4,5,6,"Not in termin"];
+        this.hps = [7.5,15,22.5,30];
+        this.positionInTermin = [1,2,3,4]
+
         this.changeCourse = this.changeCourse.bind(this)
-        this.changeFormText = this.changeFormText.bind(this)
+        this.changeFormTextForEditCourse = this.changeFormTextForEditCourse.bind(this)
         this.changeUpdateButtonStatus = this.changeUpdateButtonStatus.bind(this)
         this.handleCourseUpdate = this.handleCourseUpdate.bind(this)
+        this.handleDeleteCourse = this.handleDeleteCourse.bind(this)
+
+        this.handleAddCourse= this.handleAddCourse.bind(this)
+        this.changeFormTextForAddCourse = this.changeFormTextForAddCourse.bind(this)
+        this.changeAddButtonStatus = this.changeAddButtonStatus.bind(this)
     }
 
     componentDidMount() {
         fetch("http://localhost:9000/courseInfo")
             .then(res => res.json())
-            .then(res => {this.setState({courses: res, selectedCourse: res[0], updatedCourse: res[0]})})
+            .then(res => {this.setState({courses: res,
+                                              selectedCourse: res[0],
+                                              updatedCourse: res[0],
+                                              newCourse: {name: "", termin: this.termins[0], hp: this.hps[0],
+                                                          positionInTermin: this.positionInTermin[0]}})})
     }
 
     changeUpdateButtonStatus(){
@@ -25,7 +39,8 @@ class EditCourses extends Component{
 
         if (updatedCourse.name === originalCourse.name &&
             updatedCourse.termin == originalCourse.termin &&
-            updatedCourse.hp == originalCourse.hp)
+            updatedCourse.hp == originalCourse.hp &&
+            updatedCourse.positionInTermin == originalCourse.positionInTermin)
             this.setState({activateUpdateButton: false})
         else
             this.setState({activateUpdateButton: true})
@@ -38,29 +53,45 @@ class EditCourses extends Component{
         this.changeUpdateButtonStatus()
     }
 
-    async changeFormText(e) {
+    async changeFormTextForEditCourse(e) {
         let targetId = e.target.id
         let targetValue = e.target.value
         if (targetId === "courseNameInput")
             await this.setState({updatedCourse: {_id: this.state.selectedCourse._id,
                                                       name: targetValue,
                                                       termin: this.state.updatedCourse.termin,
-                                                      hp: this.state.updatedCourse.hp}})
+                                                      hp: this.state.updatedCourse.hp,
+                                                      positionInTermin: this.state.updatedCourse.positionInTermin}})
         else if (targetId === "terminFormInput")
             await this.setState({updatedCourse: {_id: this.state.selectedCourse._id,
                                                       name: this.state.updatedCourse.name,
                                                       termin: targetValue,
-                                                      hp: this.state.updatedCourse.hp}})
-        else
+                                                      hp: this.state.updatedCourse.hp,
+                    positionInTermin: this.state.updatedCourse.placementInTermin}})
+        else if (targetId === "hpFormInput")
             await this.setState({updatedCourse: {_id: this.state.selectedCourse._id,
                                                       name: this.state.updatedCourse.name,
                                                       termin: this.state.updatedCourse.termin,
-                                                      hp: targetValue}})
+                                                      hp: targetValue,
+                    positionInTermin: this.state.updatedCourse.placementInTermin}})
+        else
+            await this.setState({updatedCourse: {_id: this.state.selectedCourse._id,
+                                      name: this.state.updatedCourse.name,
+                                      termin: this.state.updatedCourse.termin,
+                                      hp: this.state.updatedCourse.hp,
+                    positionInTermin: targetValue}})
 
         this.changeUpdateButtonStatus()
     }
 
-    handleCourseUpdate(e){
+    async handleCourseUpdate(e){
+        if (this.state.updatedCourse.termin === "Not in termin")
+            await this.setState({updatedCourse: {_id: this.state.selectedCourse._id,
+                                      name: this.state.updatedCourse.name,
+                                      termin: -1,
+                                      hp: this.state.updatedCourse.hp,
+                    positionInTermin: this.state.updatedCourse.placementInTermin}})
+
         fetch('http://localhost:9000/update-course', {
             method: 'post',
             headers: {
@@ -70,16 +101,75 @@ class EditCourses extends Component{
         })
     }
 
+    changeAddButtonStatus(){
+        if (this.state.newCourse.name !== "")
+            this.setState({activateAddButton: true})
+        else
+            this.setState({activateAddButton: false})
+
+    }
+
+    async changeFormTextForAddCourse(e) {
+        let targetId = e.target.id
+        let targetValue = e.target.value
+        if (targetId === "courseNameInput")
+            await this.setState({newCourse: {name: targetValue,
+                                                  termin: this.state.newCourse.termin,
+                                                  hp: this.state.newCourse.hp,
+                    positionInTermin: this.state.newCourse.placementInTermin}})
+        else if (targetId === "terminFormInput"){
+            if (targetValue === "Not in termin")
+             targetValue = -1
+
+            await this.setState({newCourse: {name: this.state.newCourse.name,
+                    termin: targetValue,
+                    hp: this.state.newCourse.hp,
+                    positionInTermin: this.state.newCourse.placementInTermin}})
+        }
+        else if (targetId === "hpFormInput")
+            await this.setState({newCourse: {name: this.state.newCourse.name,
+                                                  termin: this.state.newCourse.termin,
+                                                  hp: targetValue,
+                    positionInTermin: this.state.newCourse.placementInTermin}})
+        else
+            await this.setState({newCourse: {name: this.state.newCourse.name,
+                                                  termin: this.state.newCourse.termin,
+                                                  hp: this.state.newCourse.hp,
+                    positionInTermin: targetValue}})
+
+        this.changeAddButtonStatus()
+    }
+
+    handleAddCourse(e){
+        fetch('http://localhost:9000/add-course', {
+            method: 'post',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({newCourse: this.state.newCourse})
+        })
+    }
+
+    handleDeleteCourse(){
+        fetch('http://localhost:9000/delete-course', {
+            method: 'post',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({_id: this.state.selectedCourse._id,
+                                       name: this.state.selectedCourse.name})
+        })
+    }
+
     render(){
-        let termins = [1,2,3,4,5,6,"Not in termin"]
-        let hps = [7.5,15,22.5,30]
-        let terminOptions = termins.map(termin => <option>{termin}</option>)
-        let hpOptions = hps.map(hp => <option>{hp}</option>)
+        let terminOptions = this.termins.map(termin => <option>{termin}</option>)
+        let hpOptions = this.hps.map(hp => <option>{hp}</option>)
+        let placementInTerminOptions = this.positionInTermin.map(nr => <option>{nr}</option>)
         return (<Accordion>
                     <Card>
                         <Card.Header>
                             <Accordion.Toggle as={Button} variant={"link"} eventKey={"0"}>
-                            Edit Courses
+                            Edit/Delete Course
                             </Accordion.Toggle>
                         </Card.Header>
                         <Accordion.Collapse eventKey={"0"}>
@@ -91,9 +181,11 @@ class EditCourses extends Component{
                                         {this.state.courses.map(course => <option key={course._id}>{course.name}</option>)}
                                     </Form.Control>
                                 </Form.Group>
-                                <EditCourseForm updatedCourse={this.state.updatedCourse} changeHandler={this.changeFormText}
+                                {console.log(this.state)}
+                                <EditCourseForm updatedCourse={this.state.updatedCourse} changeHandler={this.changeFormTextForEditCourse}
                                                 updateHandler={this.handleCourseUpdate} activateUpdateButton={this.state.activateUpdateButton}
-                                                termins={terminOptions} hps={hpOptions}/>
+                                                termins={terminOptions} hps={hpOptions} nrInTermin={placementInTerminOptions}
+                                                handleDeleteCourse={this.handleDeleteCourse}/>
                             </Form>
                         </Card.Body>
                         </Accordion.Collapse>
@@ -107,7 +199,9 @@ class EditCourses extends Component{
                         <Accordion.Collapse eventKey="1">
                             <Card.Body>
                                 <p>Add course</p>
-                                <AddCourseForm termins={terminOptions} hps={hpOptions} addCourseHandler={1}/>
+                                <AddCourseForm termins={terminOptions} hps={hpOptions} addCourseHandler={this.handleAddCourse}
+                                                changeHandler={this.changeFormTextForAddCourse} activateAddButton={this.state.activateAddButton}
+                                                nrInTermin={placementInTerminOptions}/>
                             </Card.Body>
                         </Accordion.Collapse>
                     </Card>

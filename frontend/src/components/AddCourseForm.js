@@ -9,7 +9,7 @@ function AddCourseForm(props) {
                     <Col>
                         <Form.Group controlId="courseNameInput">
                             <Form.Label>Course name</Form.Label>
-                            <Form.Control type="text" required/>
+                            <Form.Control type="text" onChange={props.changeHandler} required/>
                         </Form.Group>
                     </Col>
                 </Row>
@@ -17,7 +17,7 @@ function AddCourseForm(props) {
                     <Col>
                         <Form.Group controlId="terminFormInput">
                             <Form.Label>Termin</Form.Label>
-                            <Form.Control as="select">
+                            <Form.Control as="select" onChange={props.changeHandler}>
                                 {props.termins}
                             </Form.Control>
                         </Form.Group>
@@ -25,8 +25,16 @@ function AddCourseForm(props) {
                     <Col>
                         <Form.Group controlId="hpFormInput">
                             <Form.Label>hp</Form.Label>
-                            <Form.Control as="select">
+                            <Form.Control as="select" onChange={props.changeHandler}>
                                 {props.hps}
+                            </Form.Control>
+                        </Form.Group>
+                    </Col>
+                    <Col>
+                        <Form.Group controlId="placementInTerminFormInput">
+                            <Form.Label>Place in termin</Form.Label>
+                            <Form.Control as="select" onChange={props.changeHandler}>
+                                {props.nrInTermin}
                             </Form.Control>
                         </Form.Group>
                     </Col>
@@ -34,7 +42,7 @@ function AddCourseForm(props) {
                 <br/>
                 <Row>
                     <Col>
-                        <Button variant={"primary"} type={"submit"} size={"lg"} onClick={1}>
+                        <Button variant={"primary"} type={"submit"} size={"lg"} onClick={props.addCourseHandler} disabled={!props.activateAddButton}>
                             Add course!
                         </Button>
                     </Col>
