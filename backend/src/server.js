@@ -1,25 +1,36 @@
-var express = require('express');
-var userModel = require('../models/user');
-var documentModel = require('../models/document');
-var courseModel = require('../models/course');
+let express = require('express');
+let userModel = require('../models/user');
+let documentModel = require('../models/document');
+let courseModel = require('../models/course');
 require('./database');
-var cors = require('cors')
-var multer = require('multer')
-const fs = require('fs')
-var bodyParser = require("body-parser")
+let cors = require('cors');
+let multer = require('multer');
+const fs = require('fs');
+let destFolder = './uploads/';
+let bodyparser = require('body-parser');
 let rimraf = require('rimraf')
 
-var destFolder = './uploads/';
+server = express();
+server.use(bodyParser.json())
 
-var storage = multer.diskStorage({
+server.use(cors());
+
+server.listen(9000);
+
+const usersRouter = require('./users');
+
+server.use('/users', usersRouter);
+
+let storage = multer.diskStorage({
     destination: function(req, file, cb) {
-        var uploadFolder = destFolder + req.body.courseName;
+        let uploadFolder = destFolder + req.body.courseName;
         cb(null, uploadFolder);
     },
     filename: function (req, file, cb) {
         cb(null , file.originalname);
     }
 });
+
 courseModel.countDocuments({}, (err, res) => {
     var courses = [{name: "OM066G Omvårdnad GR(A) Omvårdnadens kunskapsområde 7,5 hp", termin: 1, hp: 7.5, positionInTermin: 1},
         {name: "MV006G Medicinsk vetenskap GR(A) Anatomi och fysiologi 7,5 hp", termin: 1, hp: 7.5, positionInTermin: 2},
@@ -47,42 +58,12 @@ courseModel.countDocuments({}, (err, res) => {
     }
 })
 
-var upload = multer({ storage: storage })
-
-server = express();
-server.use(bodyParser.json())
-
-server.use(cors())
-
-server.listen(9000);
-
-server.get('/',(req,res) => {
-    userModel.find().then(users => res.send(users));
-});
-
-server.get('/create-user/:user_name', (req, res) => {
-    new userModel({
-        name: req.params.user_name,
-    })
-        .save()
-        .then(() => res.redirect("/"));
-});
-
-server.get('/delete-user/:id', (req,res) => {
-   userModel
-       .remove({_id : req.params.id})
-       .then(() => res.redirect("/"));
-});
-
-server.get('/update-user/:id&:userName', (req,res) => {
-   userModel
-       .update({_id : req.params.id}, {name : req.params.userName})
-       .then(() => res.redirect("/"));
-});
+let upload = multer({ storage: storage });
 
 server.post('/post-document', upload.single('document'),(req, res) => {
-    var file = req.file;
-    var body = req.body;
+    //console.log(req.file);
+    let file = req.file;
+    let body = req.body;
     documentModel({
         fileName: file.originalname,
         courseName: body.courseName,
@@ -90,16 +71,16 @@ server.post('/post-document', upload.single('document'),(req, res) => {
         description: body.description,
         title: body.title
     }).save().then(() => res.redirect("/documents"))
-})
+});
 
 server.get('/documents/:courseName', (req,res) => {
     documentModel.find({courseName: req.params.courseName})
         .then(documents => res.send(documents.reverse()));
-})
+});
 
 server.get('/download-document/:courseName&:fileName', (req,res) => {
     res.download(destFolder + req.params.courseName + "/" + req.params.fileName)
-})
+});
 
 server.get('/courses', (req,res) => {
     courseModel.aggregate([{$group: {_id: "$termin", objects: {$push: "$$ROOT"}}},

@@ -1,11 +1,6 @@
 import React, {Component} from "react"
 import {Button, Card, Form} from "react-bootstrap";
 
-function downloadDocument(e) {
-    console.log(e);
-}
-
-
 function Document(props) {
     return (
         <Card border={"info"}>
@@ -14,9 +9,9 @@ function Document(props) {
             <Card.Title>Description</Card.Title>
             <Card.Text>{props.data.description}</Card.Text>
             <Button variant="info" href={'http://localhost:9000/download-document/' + props.data.courseName + "&" + props.data.fileName}
-                    download onClick={downloadDocument}>Download file: '{props.data.fileName}'</Button>
+                    download >Download file: '{props.data.fileName}'</Button>
         </Card.Body>
     </Card>)
 }
-
+      
 export default Document
