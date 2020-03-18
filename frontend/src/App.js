@@ -11,6 +11,7 @@ import Home from './Home';
 import Register from './Register';
 import Lhome from './Lhome';
 import Login from './Login';
+import EditCourses from "./components/EditCourses"
 import CoursePage from './components/CoursePage';
 import Cookies from 'js-cookie'
 import ChangePassword from "./ChangePassword";
@@ -49,6 +50,7 @@ function App(props) {
                             <AdminRoute path="/Register" component={Register}/>
                             <PrivateRoute path="/course/:name" component={CoursePage}/>
                             <PrivateRoute path="/Search" component={Search}/>
+                            <PrivateRoute path="/kurser" component={EditCourses}/>
                         </Switch>
                     </Layout>
                 </AuthContext.Provider>

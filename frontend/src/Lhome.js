@@ -8,48 +8,82 @@ class Lhome extends Component {
     constructor(props) {
         super(props);
         this.state = {courses: []}
+        this.notInTermin= []
     }
 
     compareFunction(a,b){
-        if (a._id > b._id)
+        if (a.positionInTermin > b.positionInTermin)
             return 1
-        else if (a._id < b._id)
+        else if (a.positionInTermin < b.positionInTermin)
             return -1
         else
-            return 0
+            return 1
     }
 
-    componentDidMount() {
-        fetch("http://localhost:9000/courses")
+    async componentDidMount() {
+        await fetch("http://localhost:9000/courses")
             .then(res => res.json())
-            .then(res => res.map(termin => <tr key={termin._id}>
-                {console.log(res)}
-                                            <td width="75px">Termin {termin._id}</td>
-                                            {termin.objects.sort(this.compareFunction)
-                                                .map(course => <td key={course._id} colSpan={(course.hp/7.5).toString()}>
-                                                                <Button variant={"link"}>
-                                                                    <Link to={"/course/" + course.name}>
-                                                                        {course.name}
-                                                                    </Link></Button>
-                                                                </td>)}
-                                           </tr>))
-            .then(res => this.setState({courses: res}))
+            .then(res => {  if(res[0]._id === -1){
+                             this.notInTermin = [res[0]]
+                             res.shift()
+                            }
+                            this.setState({courses: res})})
     }
 
     render() {
+        let inTerminHtml = this.state.courses.map(termin => <tr key={termin._id}>
+                                                                <td width="75px">Termin {termin._id}</td>
+                                                                 {termin.objects.sort(this.compareFunction)
+                                                                .map(course => <td key={course._id} colSpan={(course.hp/7.5).toString()}>
+                                                                                <Button variant={"link"}>
+                                                                                    <Link to={"/course/" + course.name}>
+                                                                                        {course.name}
+                                                                                    </Link>
+                                                                                </Button>
+                                                                 </td>)}
+                                                            </tr>)
+
+        let notInTerminHtml = this.notInTermin.map(course => <tr key={course._id}>
+                                                                     {course.objects.sort(this.compareFunction)
+                                                                    .map(course => <td key={course._id} colSpan={(course.hp/7.5).toString()}>
+                                                                                    <Button variant={"link"}>
+                                                                                        <Link to={"/course/" + course.name}>
+                                                                                        {course.name}
+                                                                                        </Link>
+                                                                                    </Button>
+                                                                                    </td>)}
+                                                                    </tr>)
+
         return (
-            <Table striped bordered hover size="sm" className="mt-5" hover={false}>
-                <thead>
-                <tr>
-                    <th colSpan="5" className="text-center">
-                        <h2>Programmet Sjuksköterskeutbildningen 180 hp</h2>
-                    </th>
-                </tr>
-                </thead>
-                <tbody>
-                {this.state.courses}
-                </tbody>
-            </Table>
+            <div>
+                <Table striped bordered hover size="sm" className="mt-5" hover={false}>
+                    <thead>
+                    <tr>
+                        <th colSpan="5" className="text-center">
+                            <h2>Programmet Sjuksköterskeutbildningen 180 hp</h2>
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {inTerminHtml}
+                    </tbody>
+                </Table>
+                <br/>
+                <br/>
+                <Table striped bordered hover size="sm" className="mt-5" hover={false}>
+                    <thead>
+                    <tr>
+                        <th colSpan="5" className="text-center">
+                            <h2>Other courses</h2>
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {notInTerminHtml}
+                    {console.log(this.state)}
+                    </tbody>
+                </Table>
+            </div>
         );
         }
     }

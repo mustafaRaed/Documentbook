@@ -1,7 +1,6 @@
 import React, {Component} from "react"
 import {Button, Card, Form} from "react-bootstrap";
 
-
 function Document(props) {
     return (
         <Card border={"info"}>
