@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
 import {BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import PrivateRoute from './PrivateRoute';
+import AdminRoute from './AdminRoute'
 import { AuthContext } from "./components/auth";
 import Header from './Header';
 import { Layout } from './components/Layout';
@@ -11,14 +12,25 @@ import Register from './Register';
 import Lhome from './Lhome';
 import Login from './Login';
 import CoursePage from './components/CoursePage';
-import Users from "./Users"
+import Cookies from 'js-cookie'
 import ChangePassword from "./ChangePassword";
 import resetPassword from "./ResetPassword"
+import Search from "./Search"
 
 
 function App(props) {
     const [user, setUser] = useState(null);
- //   const loggedIn = useMemo(() => ({user, setUser}), [user, setUser]);
+
+    const readCookie = () => {
+        const userCookie = Cookies.get("role");
+        if (userCookie) {
+            setUser(userCookie);
+        }
+    }
+
+    React.useEffect(() => {
+        readCookie();
+    }, [])
 
         return (
             <React.Fragment>
@@ -34,8 +46,9 @@ function App(props) {
                             <Route path="/Login" component={Login}/>
                             <Route path="/ChangePassword/:email" component={ChangePassword}/>
                             <Route path="/resetPassword" component={resetPassword}/>
-                            <Route path="/Register" component={Register}/>
+                            <AdminRoute path="/Register" component={Register}/>
                             <PrivateRoute path="/course/:name" component={CoursePage}/>
+                            <PrivateRoute path="/Search" component={Search}/>
                         </Switch>
                     </Layout>
                 </AuthContext.Provider>

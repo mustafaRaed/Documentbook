@@ -3,14 +3,28 @@ import { Redirect, Link } from "react-router-dom";
 import axios from "axios";
 import { Form, Input } from "./components/authForm";
 import {AuthContext} from "./components/auth";
+import Cookies from 'js-cookie'
 
 function Login(props) {
     const [userName, setUserName] = useState("");
     const [password, setPassword] = useState("");
     const [failedLogin, setFailedLogin] = useState(false);
+    const [isChecked, setIsChecked] = useState(false);
     const {user, setUser} = useContext(AuthContext);
-    const [admin, setAdmin] = useState(false);
-    const referer = props.location.state || '/';
+
+    const readCookie = () => {
+        const usernameCookie = Cookies.get("username");
+        const passwordCookie = Cookies.get("password");
+
+        if (usernameCookie && passwordCookie) {
+            setUserName(usernameCookie);
+            setPassword(passwordCookie);
+        }
+    }
+
+    React.useEffect(() => {
+        readCookie();
+    }, [])
 
     function loginToPage(e) {
         e.preventDefault();
@@ -18,8 +32,6 @@ function Login(props) {
             email: userName,
             password: password,
         };
-
-        console.log("username: " + userName + " password: " + password);
 
         axios.post("http://localhost:9000/users/login", userfrom )
             .then(res => {
@@ -35,7 +47,20 @@ function Login(props) {
     }
 
     if(user){
+        Cookies.set("role", user);
         return <Redirect to="/" />;
+    }
+
+    function handleChecked() {
+        if(isChecked) {
+            Cookies.remove("username");
+            Cookies.remove("password");
+            setIsChecked(false);
+        }else {
+            Cookies.set("username", userName);
+            Cookies.set("password", password);
+            setIsChecked(true);
+        }
     }
 
     return (
@@ -55,7 +80,7 @@ function Login(props) {
 
                 <div className="form-group">
                     <div className="custom-control custom-checkbox">
-                        <Input type="checkbox" className="custom-control-input" id="customCheck1"/>
+                        <Input type="checkbox" className="custom-control-input" id="customCheck1" onChange={ handleChecked }/>
                         <label className="custom-control-label" htmlFor="customCheck1">Spara inloggningsuppgifter</label>
                     </div>
                 </div>

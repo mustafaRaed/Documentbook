@@ -82,8 +82,14 @@ const Wrapper = styled.div`
 
 const Buttons = styled.div`
   width: 100%;
-`
+`;
+
+const SearchBox = styled.div`
+  width: 70%;
+  min-width: 300px;
+  margin: auto;
+`;
 
 
 
-export { Form, RegisterForm, EditForm, ResetForm, Label, Input, Error, Styles, Div1, Div2, Div3, Wrapper, Buttons };
+export { Form, RegisterForm, EditForm, ResetForm, Label, Input, Error, Styles, Div1, Div2, Div3, Wrapper, Buttons, SearchBox };

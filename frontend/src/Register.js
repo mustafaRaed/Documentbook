@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from "react-router-dom";
 import {Table, Card } from 'react-bootstrap'
 import Dialog from 'react-bootstrap-dialog'
 import axios from "axios";
-import { RegisterForm, EditForm, Input, Error, Div1, Div2, Div3, Wrapper, Buttons } from "./components/authForm";
-import { useAuth } from "./components/auth";
+import { RegisterForm, EditForm, Input, Div1, Div2, Div3, Wrapper, Buttons } from "./components/authForm";
 
 function Register() {
     const [userName, setUserName] = useState("");
@@ -13,7 +13,6 @@ function Register() {
     const [dialog, setDialog] = useState("");
     const [users, setUsers] = useState([]);
     const [show, setShow] = useState(false);
-    const {user } = useAuth();
 
     useEffect(() => {
         axios.get("http://localhost:9000/users")
@@ -27,7 +26,7 @@ function Register() {
     function registerUser(e) {
         e.preventDefault();
         let randomPassword = Math.random().toString(36).slice(-8);
-        console.log(randomPassword);
+
         let userfrom = {
             name: userName,
             email: email,
@@ -52,7 +51,6 @@ function Register() {
             email: editEmail,
             editEmail: email,
         };
-        console.log("Namn: " + editUser + " EditName: " + userName + " Email: " + editEmail + " editEmail: " + email)
 
         axios.post("http://localhost:9000/users/updateUser", userfrom )
             .then(res => {
@@ -82,8 +80,7 @@ function Register() {
 
     function deleteUser(id) {
         axios.delete('http://localhost:9000/users/'+id)
-            .then(res => console.log(res.data));
-               setUsers(users.filter(el => el._id !== id));
+            .then(res => setUsers(users.filter(el => el._id !== id)));
     }
 
     return (
@@ -95,7 +92,7 @@ function Register() {
                     {users.map((e) => (
                         <tr key={e._id}>
                             <td>{e.name}</td>
-                            <td><a href="#" onClick={() => {setShow(true); setUserName(e.name); setEmail(e.email); setEditUser(e.name); setEditEmail(e.email)}}>Edit</a> | <a href="#" onClick={() => {onClickDelete(e._id)}}>Delete</a></td>
+                            <td><Link to="#" onClick={() => {setShow(true); setUserName(e.name); setEmail(e.email); setEditUser(e.name); setEditEmail(e.email)}}>Edit</Link> | <Link to="#" onClick={() => {onClickDelete(e._id)}}>Delete</Link></td>
                             <Dialog ref={(component) => { setDialog(component)}} />
                         </tr>
                     ))}
