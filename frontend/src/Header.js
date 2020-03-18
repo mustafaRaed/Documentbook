@@ -34,6 +34,7 @@ function Header() {
                     <Nav className="ml-auto">
                         <Nav.Item><Nav.Link as={Link} to="/">Hem </Nav.Link></Nav.Item>
                         { user === "admin" ? (<Nav.Item><Nav.Link as={Link} to="/Register">Hantera användare</Nav.Link></Nav.Item> ) : null }
+                        { user ? (<Nav.Item><Nav.Link as={Link} to="/Search">Sök</Nav.Link></Nav.Item> ) : null }
                         { user ? (<Nav.Item><Nav.Link as={Link} to="/" onClick={() =>{ setUser(null); Cookies.remove("role")}}>Logout</Nav.Link></Nav.Item>) : (<Nav.Item><Nav.Link as={Link} to="/Login">Login</Nav.Link></Nav.Item> )}
                     </Nav>
                 </Navbar.Collapse>

@@ -1,18 +1,10 @@
-import React, {useState, Component, useContext} from 'react';
-import { Redirect } from "react-router-dom";
+import React, {useState} from 'react';
 import axios from "axios";
-import { ResetForm, Label, Input, Error } from "./components/authForm";
-import {AuthContext, useAuth} from "./components/auth";
+import { ResetForm, Label, Input } from "./components/authForm";
 
 
 function ResetPassword(props) {
     const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
-    const [newPassword, setNewPassword] = useState("");
-    const [repeatPassword, setRepeatPassword] = useState("");
-    const [failedLogin, setFailedLogin] = useState(false);
-    const {user, setUser} = useContext(AuthContext);
-    const referer = props.location.state || '/';
 
     function passwordChanger(e) {
         e.preventDefault();

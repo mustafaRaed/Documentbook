@@ -12,15 +12,14 @@ import Register from './Register';
 import Lhome from './Lhome';
 import Login from './Login';
 import CoursePage from './components/CoursePage';
-import Users from "./Users"
 import Cookies from 'js-cookie'
 import ChangePassword from "./ChangePassword";
 import resetPassword from "./ResetPassword"
+import Search from "./Search"
 
 
 function App(props) {
     const [user, setUser] = useState(null);
- //   const loggedIn = useMemo(() => ({user, setUser}), [user, setUser]);
 
     const readCookie = () => {
         const userCookie = Cookies.get("role");
@@ -49,6 +48,7 @@ function App(props) {
                             <Route path="/resetPassword" component={resetPassword}/>
                             <AdminRoute path="/Register" component={Register}/>
                             <PrivateRoute path="/course/:name" component={CoursePage}/>
+                            <PrivateRoute path="/Search" component={Search}/>
                         </Switch>
                     </Layout>
                 </AuthContext.Provider>

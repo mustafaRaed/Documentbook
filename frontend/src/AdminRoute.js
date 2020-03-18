@@ -1,10 +1,9 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Route, Redirect} from 'react-router-dom';
 import { useAuth } from "./components/auth";
 
 function AdminRoute ({ component: Component, ...rest }) {
     const { user } = useAuth();
-    console.log("AdminRoute " + user)
 
     return (
         <Route { ... rest } render = {(props) => user === "admin" ? (

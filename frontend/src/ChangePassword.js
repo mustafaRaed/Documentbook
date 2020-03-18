@@ -1,8 +1,7 @@
-import React, {useState, Component, useContext} from 'react';
+import React, {useState} from 'react';
 import { Redirect } from "react-router-dom";
 import axios from "axios";
-import { Form, Input, Error } from "./components/authForm";
-import {AuthContext, useAuth} from "./components/auth";
+import { Form, Input } from "./components/authForm";
 import Dialog from "react-bootstrap-dialog";
 
 
@@ -13,8 +12,6 @@ function ChangePassword(props) {
     const [repeatPassword, setRepeatPassword] = useState("");
     const [changedPassword, setChangedPassword] = useState(false);
     const [dialog, setDialog] = useState("");
-    const {user, setUser} = useContext(AuthContext);
-    const referer = props.location.state || '/';
 
     function passwordChanger() {
         const last = window.location.pathname;
