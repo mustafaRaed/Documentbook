@@ -4,9 +4,9 @@ import './App.css';
 import {Link} from 'react-router-dom';
 
 class Lhome extends Component {
+
     constructor(props) {
         super(props);
-
         this.state = {courses: []}
     }
 
@@ -51,7 +51,6 @@ class Lhome extends Component {
                 </tbody>
             </Table>
         );
+        }
     }
-}
-
-export default Lhome;
+    export default Lhome;

@@ -1,6 +1,8 @@
-import React from 'react';
+import React, {useContext } from 'react';
+import {Link} from 'react-router-dom';
 import { Nav, Navbar } from 'react-bootstrap'
 import styled from 'styled-components'
+import {AuthContext} from "./components/auth";
 
 const Styles = styled.div`
 .navbar {
@@ -10,6 +12,7 @@ const Styles = styled.div`
 
 .navbar-brand, .navbar-nav .nav-link {
     color: #222;
+    margin: 2px;
     
     &:hover {
         color: #454545;
@@ -18,48 +21,25 @@ const Styles = styled.div`
 }
 `;
 
-class Header extends React.Component {
+function Header() {
 
-    constructor(props) {
-        super(props);
-        this.state = {
-            loggedIn: true,
-            isAdmin: true
-        }
-    }
-
-    setLogin = () => {
-        this.setState(prevState => ({
-            loggedIn: !prevState.loggedIn
-        }));
-    }
-
-
-    render(){
+    const {user, setUser} = useContext(AuthContext);
+  //  const [isUser, setIsUser] = user;
+ //   const [isAdmin, setIsAdmin] = admin;
     return(
         <Styles>
             <Navbar expand="lg">
                 <Navbar.Toggle aria-controls="basic-navbar-nav" />
                 <Navbar.Collapse id="basic-navbar-nav">
                     <Nav className="ml-auto">
-                        <Nav.Item><Nav.Link href="/">Hem</Nav.Link></Nav.Item>
-                        {this.state.loggedIn ?
-                            <Nav.Item><Nav.Link href="/dokument">Hantera dokument<span
-                                className="badge badge-pill badge-danger">1</span></Nav.Link></Nav.Item> : null }
-                        {this.state.loggedIn && this.state.isAdmin ?
-                            < Nav.Item > < Nav.Link href="/kurser">Hantera kurser</Nav.Link></Nav.Item> :null }
-                        {this.state.loggedIn && this.state.isAdmin ?
-                            < Nav.Item > < Nav.Link href="/Users">Users</Nav.Link></Nav.Item> :null }
-                        { this.state.loggedIn ?
-                            <Nav.Item><Nav.Link onClick={this.setLogin} href="/">Logga ut</Nav.Link></Nav.Item> :null }
-                        { this.state.loggedIn ?
-                            null : <Nav.Item><Nav.Link onClick={this.setLogin} href="/Login">Logga in</Nav.Link></Nav.Item> }
+                        <Nav.Item><Nav.Link as={Link} to="/">Hem </Nav.Link></Nav.Item>
+                        { user === "admin" ? (<Nav.Item><Nav.Link as={Link} to="/Register">Hantera användare</Nav.Link></Nav.Item> ) : null }
+                        { user ? (<Nav.Item><Nav.Link as={Link} to="/" onClick={() =>{ setUser(null)}}>Logout</Nav.Link></Nav.Item>) : (<Nav.Item><Nav.Link as={Link} to="/Login">Login</Nav.Link></Nav.Item> )}
                     </Nav>
                 </Navbar.Collapse>
             </Navbar>
         </Styles>
 )
-}
 }
 
 export default Header
