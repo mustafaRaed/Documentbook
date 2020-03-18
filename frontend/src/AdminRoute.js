@@ -4,7 +4,6 @@ import { useAuth } from "./components/auth";
 
 function AdminRoute ({ component: Component, ...rest }) {
     const { user } = useAuth();
-
     return (
         <Route { ... rest } render = {(props) => user === "admin" ? (
         <Component {...props} />

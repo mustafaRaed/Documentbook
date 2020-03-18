@@ -26,6 +26,7 @@ function Register() {
     function registerUser(e) {
         e.preventDefault();
         let randomPassword = Math.random().toString(36).slice(-8);
+
         let userfrom = {
             name: userName,
             email: email,

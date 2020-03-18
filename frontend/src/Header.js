@@ -25,7 +25,6 @@ const Styles = styled.div`
 function Header() {
 
     const {user, setUser} = useContext(AuthContext);
-
     return(
         <Styles>
             <Navbar expand="lg">

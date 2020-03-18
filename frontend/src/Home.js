@@ -1,5 +1,6 @@
 import React from 'react';
 import './App.css'
+import { AuthContext } from "./components/auth";
 
 function Home() {
         return (

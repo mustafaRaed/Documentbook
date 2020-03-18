@@ -35,7 +35,7 @@ function App(props) {
         return (
             <React.Fragment>
             <Router>
-                <AuthContext.Provider value={{user, setUser }}>
+                <AuthContext.Provider value={{user, setUser}}>
 
                     <Header />
                     <Searchbar/>
